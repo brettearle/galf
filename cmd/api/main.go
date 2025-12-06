@@ -10,6 +10,8 @@ import (
 	"os/signal"
 	"sync"
 	"time"
+
+	fl "github.com/brettearle/galf/cmd/api/internal/flag"
 )
 
 type Config struct {
@@ -17,9 +19,9 @@ type Config struct {
 	Port string
 }
 
-func NewServer() http.Handler {
+func NewServer(fl *fl.Service) http.Handler {
 	mux := http.NewServeMux()
-	addRoutes(mux)
+	addRoutes(mux, fl)
 	var handler http.Handler = mux
 	return handler
 }
@@ -28,7 +30,11 @@ func Run(ctx context.Context, cfg Config, stderr io.Writer) error {
 	ctx, cancel := signal.NotifyContext(ctx)
 	defer cancel()
 
-	srv := NewServer()
+	//TODO: Place holder WIP
+	var store fl.Store
+	flagSrv := fl.NewService(store)
+
+	srv := NewServer(flagSrv)
 	httpServer := &http.Server{
 		Addr:    net.JoinHostPort(cfg.Host, cfg.Port),
 		Handler: srv,

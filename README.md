@@ -66,7 +66,7 @@ cd galf
 ### Build
 
 ```bash
-go build ./cmd/galf
+go build -o bin/galf ./cmd/api 
 ```
 
 ---
@@ -74,7 +74,7 @@ go build ./cmd/galf
 ### Run locally
 
 ```bash
-./galf --config path/to/config.yml
+./bin/galf
 ```
 
 Example feature flag API call:
@@ -88,7 +88,7 @@ Example JSON response:
 ```json
 {
   "name": "my-feature",
-  "state": true
+  "state": "off"
 }
 ```
 

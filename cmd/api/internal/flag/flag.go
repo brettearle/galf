@@ -1,6 +1,9 @@
 package fl
 
-import "context"
+import (
+	"context"
+	"fmt"
+)
 
 type Store interface {
 	Create(ctx context.Context, f Flag) error
@@ -36,4 +39,6 @@ func NewService(s Store) *Service {
 	}
 }
 
-func (s *Service) RegisterFlag(f Flag) {}
+func (s *Service) Register(f Flag) {
+	fmt.Println("Registering....", f)
+}

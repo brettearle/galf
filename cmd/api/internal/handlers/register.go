@@ -49,28 +49,31 @@ func (f *RegisterFlagRequest) ToFlag() fl.Flag {
 	}
 }
 
-func Register(w http.ResponseWriter, r *http.Request) {
-	var v RegisterFlagRequest
+func Register(f *fl.Service) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var v RegisterFlagRequest
 
-	ct := r.Header.Get("Content-Type")
-	if !strings.HasPrefix(ct, "application/json") {
-		http.Error(w, "Content-Type must be application/json", http.StatusUnsupportedMediaType)
-		return
+		ct := r.Header.Get("Content-Type")
+		if !strings.HasPrefix(ct, "application/json") {
+			http.Error(w, "Content-Type must be application/json", http.StatusUnsupportedMediaType)
+			return
+		}
+
+		if err := json.NewDecoder(r.Body).Decode(&v); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		if err := v.Validate(); err != nil {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			return
+		}
+
+		flag := v.ToFlag()
+		fmt.Println(flag)
+
+		f.Register(flag)
+
+		w.WriteHeader(http.StatusOK)
 	}
-
-	if err := json.NewDecoder(r.Body).Decode(&v); err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
-	if err := v.Validate(); err != nil {
-		w.WriteHeader(http.StatusUnprocessableEntity)
-		return
-	}
-
-	flag := v.ToFlag()
-
-	fmt.Println("Flag service here", flag.Name)
-
-	w.WriteHeader(http.StatusOK)
 }
