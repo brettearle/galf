@@ -27,9 +27,7 @@ Use it when you want:
 
 galf/
 ├── cmd/            # Binaries / CLI entrypoints (coming soon)
-├── api/            # HTTP handlers for feature-flag endpoints
 ├── internal/       # Core business logic (flag storage, evaluation, utils)
-├── testutil/       # Shared test helpers
 ├── go.mod          # Go module definition
 └── README.md       # Project documentation
 
