@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	fl "github.com/brettearle/galf/cmd/api/internal/flag"
 	h "github.com/brettearle/galf/cmd/api/internal/handlers"
+	fl "github.com/brettearle/galf/internal/flag"
 )
 
 func addRoutes(m *http.ServeMux, f *fl.Service) {

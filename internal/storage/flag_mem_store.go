@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 
+	fl "github.com/brettearle/galf/internal/flag"
 	_ "modernc.org/sqlite"
 )
 
@@ -20,7 +21,7 @@ type MemStore struct {
 func (m *MemStore) initSchema(ctx context.Context) {
 	_, err := m.Store.ExecContext(ctx,
 		`CREATE TABLE flag (
-			id INT PRIMARY KEY,
+			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name VARCHAR(255),
 			state VARCHAR(255)
 		)`)
@@ -29,8 +30,11 @@ func (m *MemStore) initSchema(ctx context.Context) {
 	}
 }
 
-func NewMemStore() (*MemStore, error) {
-	ctx := context.Background()
+func (m *MemStore) Create(ctx context.Context, f fl.Flag) error {
+	return fmt.Errorf("NOT IMPLEMENTED")
+}
+
+func NewMemStore(ctx context.Context) (*MemStore, error) {
 	dsnURI := "file:memdb1?mode=memory&cache=shared"
 	db, err := sql.Open("sqlite", dsnURI)
 	if err != nil {

@@ -3,11 +3,13 @@ package storage_test
 import (
 	"testing"
 
+	fl "github.com/brettearle/galf/internal/flag"
 	"github.com/brettearle/galf/internal/storage"
 )
 
 func TestMemStore(t *testing.T) {
-	db, err := storage.NewMemStore()
+	ctx := t.Context()
+	db, err := storage.NewMemStore(ctx)
 	if err != nil {
 		t.Errorf("failed to init DB")
 	}
@@ -17,45 +19,6 @@ func TestMemStore(t *testing.T) {
 		err = db.Store.Ping()
 		if err != nil {
 			t.Errorf("failed to ping db")
-		}
-	})
-
-	t.Run("create table", func(t *testing.T) {
-		_, err := db.Store.Exec(`CREATE TABLE test (
-				id int,
-				name varchar(255)
-			)`)
-		if err != nil {
-			t.Errorf("failed to create table")
-		}
-	})
-
-	t.Run("insert row", func(t *testing.T) {
-		var testRow struct {
-			id   int
-			name string
-		}
-
-		_, err := db.Store.Exec(`INSERT INTO test (id, name) VALUES (1, 'john')`)
-		if err != nil {
-			t.Errorf("failed to insert %v", err)
-		}
-		rows, err := db.Store.Query("SELECT * FROM test")
-		if err != nil {
-			t.Errorf("failed to select rows %v", err)
-		}
-		defer rows.Close()
-		if rows.Next() {
-			err = rows.Scan(&testRow.id, &testRow.name)
-			if err != nil {
-				t.Errorf("failed to scan row %v", err)
-			}
-		}
-		if testRow.id != 1 {
-			t.Errorf("got %d want %d", testRow.id, 1)
-		}
-		if testRow.name != "john" {
-			t.Errorf("got %s want %s", testRow.name, "john")
 		}
 	})
 
@@ -99,6 +62,17 @@ func TestMemStore(t *testing.T) {
 			if !cols[c] {
 				t.Errorf("expected column %q on table flag, but it was missing", c)
 			}
+		}
+	})
+
+	t.Run("Create a flag with name `feature` and state `off`", func(t *testing.T) {
+		flag := fl.Flag{
+			Name:  "feature",
+			State: "off",
+		}
+		err := db.Create(ctx, flag)
+		if err != nil {
+			t.Errorf("failed to create flag row %v", err)
 		}
 	})
 }

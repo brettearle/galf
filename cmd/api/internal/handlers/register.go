@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	fl "github.com/brettearle/galf/cmd/api/internal/flag"
+	fl "github.com/brettearle/galf/internal/flag"
 )
 
 type RegisterFlagRequest struct {

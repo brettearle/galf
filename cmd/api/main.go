@@ -11,7 +11,7 @@ import (
 	"sync"
 	"time"
 
-	fl "github.com/brettearle/galf/cmd/api/internal/flag"
+	fl "github.com/brettearle/galf/internal/flag"
 )
 
 type Config struct {
