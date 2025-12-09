@@ -7,7 +7,7 @@ import (
 
 type Store interface {
 	Create(ctx context.Context, f Flag) error
-	GetByID(ctx context.Context, name string) (Flag, error)
+	GetByName(ctx context.Context, name string) (*Flag, error)
 }
 
 // Chosen incase additional states are required
@@ -40,5 +40,5 @@ func NewService(s Store) *Service {
 }
 
 func (s *Service) Register(f Flag) {
-	fmt.Println("Registering....", f)
+	fmt.Println("Registering NOT IMPLEMENTED arg = ", f)
 }

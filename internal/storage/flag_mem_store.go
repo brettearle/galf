@@ -9,9 +9,10 @@ import (
 	_ "modernc.org/sqlite"
 )
 
+// FOR REFERENCE ONLY
 //type Store interface {
 //	Create(ctx context.Context, f Flag) error
-//	GetByID(ctx context.Context, name string) (Flag, error)
+//	GetByName(ctx context.Context, name string) (Flag, error)
 //}
 
 type MemStore struct {
@@ -31,7 +32,31 @@ func (m *MemStore) initSchema(ctx context.Context) {
 }
 
 func (m *MemStore) Create(ctx context.Context, f fl.Flag) error {
-	return fmt.Errorf("NOT IMPLEMENTED")
+	_, err := m.Store.ExecContext(ctx, `
+		INSERT INTO flag (name, state) VALUES (?,?) 
+		`, f.Name, f.State)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (m *MemStore) GetByName(ctx context.Context, name string) (*fl.Flag, error) {
+	var flag fl.Flag
+	rows, err := m.Store.QueryContext(ctx, `
+		SELECT name, state FROM flag WHERE name=? 
+		`, name)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		if err := rows.Scan(&flag.Name, &flag.State); err != nil {
+			return nil, err
+		}
+	}
+	return &flag, nil
 }
 
 func NewMemStore(ctx context.Context) (*MemStore, error) {

@@ -13,7 +13,7 @@ func TestMemStore(t *testing.T) {
 	if err != nil {
 		t.Errorf("failed to init DB")
 	}
-	defer db.Store.Close()
+	t.Cleanup(func() { db.Store.Close() })
 
 	t.Run("ping store", func(t *testing.T) {
 		err = db.Store.Ping()
@@ -73,6 +73,26 @@ func TestMemStore(t *testing.T) {
 		err := db.Create(ctx, flag)
 		if err != nil {
 			t.Errorf("failed to create flag row %v", err)
+		}
+	})
+
+	t.Run("Get flad with name `feature`", func(t *testing.T) {
+		flag := fl.Flag{
+			Name:  "feature",
+			State: "off",
+		}
+		err := db.Create(ctx, flag)
+		if err != nil {
+			t.Fatalf(".Create(ctx, %v) got error %v want nil", flag, err)
+		}
+
+		got, err := db.GetByName(ctx, flag.Name)
+		if err != nil {
+			t.Fatalf("GetByName(ctx, %s) got error %v want nil", flag.Name, err)
+		}
+
+		if got.Name != flag.Name {
+			t.Fatalf(".GetByName(ctx, %s) got %s want %s", flag.Name, err, flag.Name)
 		}
 	})
 }
