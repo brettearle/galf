@@ -3,11 +3,16 @@ package fl
 import (
 	"context"
 	"fmt"
+	"strings"
 )
 
 type Store interface {
 	Create(ctx context.Context, f Flag) error
 	GetByName(ctx context.Context, name string) (*Flag, error)
+}
+
+type ValidationError struct {
+	Fields []string
 }
 
 // Chosen incase additional states are required
@@ -39,6 +44,42 @@ func NewService(s Store) *Service {
 	}
 }
 
-func (s *Service) Register(f Flag) {
-	fmt.Println("Registering NOT IMPLEMENTED arg = ", f)
+func (v *ValidationError) Error() string {
+	return fmt.Sprintf("validation failed: %s", strings.Join(v.Fields, ", "))
+}
+
+func (s *Service) Validate(f Flag) error {
+	var failed []string
+	if f.Name == "" {
+		failed = append(failed, "name is required")
+	}
+
+	switch f.State {
+	case On, Off:
+		//OK
+	default:
+		failed = append(failed, "state must be: 'on' 'off'")
+	}
+
+	if len(failed) > 0 {
+		return &ValidationError{Fields: failed}
+	}
+
+	return nil
+}
+
+func (s *Service) Register(ctx context.Context, f Flag) error {
+	err := s.Validate(f)
+	if err != nil {
+		return fmt.Errorf("%v", err)
+	}
+	err = s.store.Create(ctx, f)
+	if err != nil {
+		return fmt.Errorf("Failed to register new flag")
+	}
+	return nil
+}
+
+func (s *Service) Get(ctx context.Context) error {
+	return fmt.Errorf("NOT IMPLEMENTED")
 }

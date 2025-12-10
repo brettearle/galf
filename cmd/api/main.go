@@ -12,6 +12,7 @@ import (
 	"time"
 
 	fl "github.com/brettearle/galf/internal/flag"
+	"github.com/brettearle/galf/internal/storage"
 )
 
 type Config struct {
@@ -30,8 +31,11 @@ func Run(ctx context.Context, cfg Config, stderr io.Writer) error {
 	ctx, cancel := signal.NotifyContext(ctx)
 	defer cancel()
 
-	//TODO: Place holder WIP
-	var store fl.Store
+	//TODO: Upgrade to persisted storage
+	store, err := storage.NewMemStore(ctx)
+	if err != nil {
+		fmt.Fprintf(stderr, "error initialising storage: %s\n", err)
+	}
 	flagSrv := fl.NewService(store)
 
 	srv := NewServer(flagSrv)

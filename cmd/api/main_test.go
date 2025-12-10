@@ -108,6 +108,14 @@ func Test(t *testing.T) {
 			contentType:    &textContent,
 			expectedStatus: http.StatusUnsupportedMediaType,
 		},
+		{
+			name:           "tt: /flag/test1 with correct name returns 200",
+			method:         http.MethodGet,
+			body:           "",
+			endpoint:       "http://0.0.0.0:8080/flag/test1",
+			contentType:    nil,
+			expectedStatus: http.StatusOK,
+		},
 	}
 	for _, tt := range cases {
 		t.Run(tt.name, func(t *testing.T) {

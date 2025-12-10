@@ -70,9 +70,12 @@ func Register(f *fl.Service) http.HandlerFunc {
 		}
 
 		flag := v.ToFlag()
-		fmt.Println(flag)
 
-		f.Register(flag)
+		err := f.Register(r.Context(), flag)
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
 
 		w.WriteHeader(http.StatusOK)
 	}
