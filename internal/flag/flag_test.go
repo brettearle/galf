@@ -46,4 +46,8 @@ func TestFlag(t *testing.T) {
 			t.Fatalf("Got %v wanted error", err)
 		}
 	})
+
+	t.Run("Get returns flag", func(t *testing.T) {
+		t.Fatalf("NOT IMPLEMENTED")
+	})
 }

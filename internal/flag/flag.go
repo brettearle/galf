@@ -80,6 +80,6 @@ func (s *Service) Register(ctx context.Context, f Flag) error {
 	return nil
 }
 
-func (s *Service) Get(ctx context.Context) error {
-	return fmt.Errorf("NOT IMPLEMENTED")
+func (s *Service) Get(ctx context.Context, name string) (*Flag, error) {
+	return nil, fmt.Errorf("NOT IMPLEMENTED")
 }
