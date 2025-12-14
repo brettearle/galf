@@ -19,7 +19,7 @@ func TestFlag(t *testing.T) {
 			Name:  "feature",
 			State: "off",
 		}
-		err := srv.Register(t.Context(), f)
+		err := srv.Register(t.Context(), &f)
 		if err != nil {
 			t.Fatalf("Got %v wanted nil", err)
 		}
@@ -30,7 +30,7 @@ func TestFlag(t *testing.T) {
 			Name:  "feature",
 			State: "this is not a state",
 		}
-		err := srv.Register(t.Context(), f)
+		err := srv.Register(t.Context(), &f)
 		if err == nil {
 			t.Fatalf("Got %v wanted error", err)
 		}
@@ -41,7 +41,7 @@ func TestFlag(t *testing.T) {
 			Name:  "",
 			State: "off",
 		}
-		err := srv.Register(t.Context(), f)
+		err := srv.Register(t.Context(), &f)
 		if err == nil {
 			t.Fatalf("Got %v wanted error", err)
 		}

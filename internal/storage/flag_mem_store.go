@@ -31,7 +31,7 @@ func (m *MemStore) initSchema(ctx context.Context) {
 	}
 }
 
-func (m *MemStore) Create(ctx context.Context, f fl.Flag) error {
+func (m *MemStore) Create(ctx context.Context, f *fl.Flag) error {
 	_, err := m.Store.ExecContext(ctx, `
 		INSERT INTO flag (name, state) VALUES (?,?) 
 		`, f.Name, f.State)

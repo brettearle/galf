@@ -70,7 +70,7 @@ func TestMemStore(t *testing.T) {
 			Name:  "feature",
 			State: "off",
 		}
-		err := db.Create(ctx, flag)
+		err := db.Create(ctx, &flag)
 		if err != nil {
 			t.Errorf("failed to create flag row %v", err)
 		}
@@ -81,7 +81,7 @@ func TestMemStore(t *testing.T) {
 			Name:  "feature",
 			State: "off",
 		}
-		err := db.Create(ctx, flag)
+		err := db.Create(ctx, &flag)
 		if err != nil {
 			t.Fatalf(".Create(ctx, %v) got error %v want nil", flag, err)
 		}

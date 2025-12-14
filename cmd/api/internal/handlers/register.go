@@ -71,7 +71,7 @@ func Register(f *fl.Service) http.HandlerFunc {
 
 		flag := v.ToFlag()
 
-		err := f.Register(r.Context(), flag)
+		err := f.Register(r.Context(), &flag)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
