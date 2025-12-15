@@ -48,6 +48,23 @@ func TestFlag(t *testing.T) {
 	})
 
 	t.Run("Get returns flag", func(t *testing.T) {
-		t.Fatalf("NOT IMPLEMENTED")
+		f := fl.Flag{
+			Name:  "featureToGet",
+			State: "off",
+		}
+		err := srv.Register(t.Context(), &f)
+		if err != nil {
+			t.Fatalf("Error before get %v", err)
+		}
+		got, err := srv.Get(t.Context(), f.Name)
+		if err != nil {
+			t.Fatalf("Got %v want %v", err, f)
+		}
+		if got.Name != f.Name {
+			t.Fatalf("Got %v want %v", got.Name, f.Name)
+		}
+		if got.State != f.State {
+			t.Fatalf("Got %v want %v", got.State, f.State)
+		}
 	})
 }

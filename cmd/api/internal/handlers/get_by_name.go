@@ -12,18 +12,17 @@ func GetByName(f *fl.Service) http.HandlerFunc {
 		name := r.PathValue("name")
 		flag, err := f.Get(r.Context(), name)
 		if err != nil {
-			w.Write([]byte("NOT IMPLEMENTED"))
+			w.WriteHeader(http.StatusInternalServerError)
 		}
 
-		_, err = json.Marshal(flag)
+		jsonFlag, err := json.Marshal(flag)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			w.Write([]byte("Failed to get flag, please contact admin"))
+			return
 		}
-		//TODO:
-		//encode flag '_' this encode should be its own package so we dont have to re write
-		//send down the wire
 
-		w.Write([]byte("NOT IMPLEMENTED"))
+		w.WriteHeader(http.StatusOK)
+		w.Write(jsonFlag)
 	}
 }

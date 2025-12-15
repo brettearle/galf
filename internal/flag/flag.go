@@ -81,5 +81,9 @@ func (s *Service) Register(ctx context.Context, f *Flag) error {
 }
 
 func (s *Service) Get(ctx context.Context, name string) (*Flag, error) {
-	return nil, fmt.Errorf("NOT IMPLEMENTED")
+	res, err := s.store.GetByName(ctx, name)
+	if err != nil {
+		return nil, fmt.Errorf("Failed to get flag")
+	}
+	return res, nil
 }
