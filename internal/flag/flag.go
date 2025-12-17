@@ -76,7 +76,7 @@ func (s *Service) Register(ctx context.Context, f *Flag) error {
 	}
 	err = s.store.Create(ctx, f)
 	if err != nil {
-		return fmt.Errorf("Failed to register new flag")
+		return fmt.Errorf("failed to register new flag")
 	}
 	return nil
 }
@@ -84,14 +84,14 @@ func (s *Service) Register(ctx context.Context, f *Flag) error {
 func (s *Service) Get(ctx context.Context, name string) (*Flag, error) {
 	res, err := s.store.GetByName(ctx, name)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to get flag")
+		return nil, fmt.Errorf("failed to get flag")
 	}
 	return res, nil
 }
 func (s *Service) GetAll(ctx context.Context) ([]*Flag, error) {
 	res, err := s.store.GetAll(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("Failed to get flag")
+		return nil, fmt.Errorf("failed to get flag")
 	}
 	return res, nil
 }

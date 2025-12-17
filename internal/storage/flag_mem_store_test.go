@@ -76,7 +76,7 @@ func TestMemStore(t *testing.T) {
 		}
 	})
 
-	t.Run("Get flad with name `feature`", func(t *testing.T) {
+	t.Run("Get flag with name `feature`", func(t *testing.T) {
 		flag := fl.Flag{
 			Name:  "feature",
 			State: "off",
@@ -92,7 +92,38 @@ func TestMemStore(t *testing.T) {
 		}
 
 		if got.Name != flag.Name {
-			t.Fatalf(".GetByName(ctx, %s) got %s want %s", flag.Name, err, flag.Name)
+			t.Fatalf(".GetByName(ctx, %s) got %s want %s", flag.Name, got.Name, flag.Name)
+		}
+	})
+
+	t.Run("Get all flags", func(t *testing.T) {
+		flag1 := fl.Flag{
+			Name:  "feature1",
+			State: "off",
+		}
+		flag2 := fl.Flag{
+			Name:  "feature2",
+			State: "off",
+		}
+		err := db.Create(ctx, &flag1)
+		if err != nil {
+			t.Fatalf(".Create(ctx, %v) got error %v want nil", flag1, err)
+		}
+		err = db.Create(ctx, &flag2)
+		if err != nil {
+			t.Fatalf(".Create(ctx, %v) got error %v want nil", flag2, err)
+		}
+
+		got, err := db.GetAll(ctx)
+		if err != nil {
+			t.Fatalf("GetAll(ctx) got error %v want nil", err)
+		}
+
+		if got[0].Name != flag1.Name {
+			t.Fatalf(".GetAll(ctx) got %s want %s", got[0].Name, flag1.Name)
+		}
+		if got[1].Name != flag1.Name {
+			t.Fatalf(".GetAll(ctx) got %s want %s", got[1].Name, flag1.Name)
 		}
 	})
 }

@@ -17,7 +17,7 @@ func GetAll(f *fl.Service) http.HandlerFunc {
 		jsonFlag, err := json.Marshal(flags)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-			w.Write([]byte("Failed to get flag, please contact admin"))
+			w.Write([]byte("failed to get flag, please contact admin"))
 			return
 		}
 

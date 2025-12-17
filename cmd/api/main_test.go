@@ -124,6 +124,14 @@ func Test(t *testing.T) {
 			contentType:    nil,
 			expectedStatus: http.StatusOK,
 		},
+		{
+			name:           "tt: /flag returns 200",
+			method:         http.MethodGet,
+			body:           "",
+			endpoint:       "http://0.0.0.0:8080/api/flag",
+			contentType:    nil,
+			expectedStatus: http.StatusOK,
+		},
 	}
 	for _, tt := range cases {
 		t.Run(tt.name, func(t *testing.T) {

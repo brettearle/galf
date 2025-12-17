@@ -59,6 +59,11 @@ func (m *MemStore) GetByName(ctx context.Context, name string) (*fl.Flag, error)
 	return &flag, nil
 }
 
+func (m *MemStore) GetAll(ctx context.Context) ([]*fl.Flag, error) {
+	fmt.Println("Not implemented")
+	return nil, fmt.Errorf("Not implemented")
+}
+
 func NewMemStore(ctx context.Context) (*MemStore, error) {
 	dsnURI := "file:memdb1?mode=memory&cache=shared"
 	db, err := sql.Open("sqlite", dsnURI)
