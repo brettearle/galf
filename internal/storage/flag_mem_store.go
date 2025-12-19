@@ -59,9 +59,25 @@ func (m *MemStore) GetByName(ctx context.Context, name string) (*fl.Flag, error)
 	return &flag, nil
 }
 
-func (m *MemStore) GetAll(ctx context.Context) ([]*fl.Flag, error) {
-	fmt.Println("Not implemented")
-	return nil, fmt.Errorf("Not implemented")
+func (m *MemStore) GetAll(ctx context.Context) (*[]fl.Flag, error) {
+	var flagSlice []fl.Flag
+	rows, err := m.Store.QueryContext(ctx, `SELECT * FROM flag`)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	count := 0
+	for rows.Next() {
+		var id int
+		var name string
+		var state fl.State
+		if err := rows.Scan(&id, &name, &state); err != nil {
+			return nil, err
+		}
+		flagSlice = append(flagSlice, fl.Flag{Name: name, State: state})
+		count += 1
+	}
+	return &flagSlice, nil
 }
 
 func NewMemStore(ctx context.Context) (*MemStore, error) {
