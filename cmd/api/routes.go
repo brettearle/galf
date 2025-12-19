@@ -10,6 +10,6 @@ import (
 func addRoutes(m *http.ServeMux, f *fl.Service) {
 	m.HandleFunc("GET /api/health", h.Health)
 	m.HandleFunc("POST /api/register", h.Register(f))
-	m.HandleFunc("GET /api/flag", h.GetAll(f))
+	m.HandleFunc("GET /api/flags", h.GetAll(f))
 	m.HandleFunc("GET /api/flag/{name}", h.GetByName(f))
 }

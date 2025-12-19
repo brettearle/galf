@@ -128,7 +128,7 @@ func Test(t *testing.T) {
 			name:           "tt: /flag returns 200",
 			method:         http.MethodGet,
 			body:           "",
-			endpoint:       "http://0.0.0.0:8080/api/flag",
+			endpoint:       "http://0.0.0.0:8080/api/flags",
 			contentType:    nil,
 			expectedStatus: http.StatusOK,
 		},

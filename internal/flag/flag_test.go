@@ -68,7 +68,7 @@ func TestFlag(t *testing.T) {
 		}
 	})
 
-	t.Run("Get All returns []*Flag", func(t *testing.T) {
+	t.Run("Get All returns *[]Flag", func(t *testing.T) {
 		store.Store.Exec(`DELETE FROM flag`)
 
 		f := fl.Flag{
