@@ -115,7 +115,7 @@ Please keep PRs focused and well-documented.
 
 ## 🛣️ Roadmap (Planned Features)
 
-* [ ] In-memory flag store
+* [x] In-memory flag store
 * [ ] Persistent storage backend (JSON, SQLite, Postgres)
 * [ ] REST + gRPC APIs
 * [ ] Client SDKs (Go, JS/TS, Python)
