@@ -97,7 +97,8 @@ func TestMemStore(t *testing.T) {
 	})
 
 	t.Run("Get all flags", func(t *testing.T) {
-		//TODO: dump db between tests
+		db.Store.Exec(`DELETE FROM flag`)
+
 		flag1 := fl.Flag{
 			Name:  "feature1",
 			State: "off",
@@ -106,7 +107,7 @@ func TestMemStore(t *testing.T) {
 			Name:  "feature2",
 			State: "off",
 		}
-		err := db.Create(ctx, &flag1)
+		err = db.Create(ctx, &flag1)
 		if err != nil {
 			t.Fatalf(".Create(ctx, %v) got error %v want nil", flag1, err)
 		}
@@ -121,10 +122,10 @@ func TestMemStore(t *testing.T) {
 		}
 		deref := *got
 		if deref[0].Name != flag1.Name {
-			t.Fatalf(".GetAll(ctx) got %s want %s", deref[0].Name, flag1.Name)
+			t.Fatalf(".GetAll(ctx) f1 got %s want %s", deref[0].Name, flag1.Name)
 		}
-		if deref[1].Name != flag1.Name {
-			t.Fatalf(".GetAll(ctx) got %s want %s", deref[1].Name, flag1.Name)
+		if deref[1].Name != flag2.Name {
+			t.Fatalf(".GetAll(ctx) f2 got %s want %s", deref[1].Name, flag2.Name)
 		}
 	})
 }

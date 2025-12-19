@@ -69,6 +69,8 @@ func TestFlag(t *testing.T) {
 	})
 
 	t.Run("Get All returns []*Flag", func(t *testing.T) {
+		store.Store.Exec(`DELETE FROM flag`)
+
 		f := fl.Flag{
 			Name:  "featureToGet",
 			State: "off",
@@ -77,15 +79,18 @@ func TestFlag(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Error before get %v", err)
 		}
+
 		got, err := srv.GetAll(t.Context())
 		if err != nil {
 			t.Fatalf("Got %v want %v", err, f)
 		}
-		if got[0].Name != f.Name {
-			t.Fatalf("Got %v want %v", got[0].Name, f.Name)
+		deref := *got
+
+		if deref[0].Name != f.Name {
+			t.Fatalf("Got %v want %v", deref[0].Name, f.Name)
 		}
-		if got[0].State != f.State {
-			t.Fatalf("Got %v want %v", got[0].State, f.State)
+		if deref[0].State != f.State {
+			t.Fatalf("Got %v want %v", deref[0].State, f.State)
 		}
 	})
 }
