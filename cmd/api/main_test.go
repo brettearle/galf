@@ -44,6 +44,7 @@ func Test(t *testing.T) {
 			contentType:    nil,
 			expectedStatus: http.StatusOK,
 		},
+		//Ops on single flag
 		{
 			name:           "tt: /register post with correct data returns 200",
 			method:         http.MethodPost,
@@ -124,6 +125,15 @@ func Test(t *testing.T) {
 			contentType:    nil,
 			expectedStatus: http.StatusOK,
 		},
+		{
+			name:           "tt: /flag/test1 deletes test1 flag and returns 200",
+			method:         http.MethodDelete,
+			body:           "",
+			endpoint:       "http://0.0.0.0:8080/api/flag/test1",
+			contentType:    nil,
+			expectedStatus: http.StatusOK,
+		},
+		// Operations on all flags
 		{
 			name:           "tt: /flag returns 200",
 			method:         http.MethodGet,
