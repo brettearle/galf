@@ -80,6 +80,16 @@ func (m *MemStore) GetAll(ctx context.Context) (*[]fl.Flag, error) {
 	return &flagSlice, nil
 }
 
+func (m *MemStore) DeleteByName(ctx context.Context, name string) error {
+	_, err := m.Store.ExecContext(ctx, `
+		DELETE FROM flag WHERE name=? 
+		`, name)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func NewMemStore(ctx context.Context) (*MemStore, error) {
 	dsnURI := "file:memdb1?mode=memory&cache=shared"
 	db, err := sql.Open("sqlite", dsnURI)

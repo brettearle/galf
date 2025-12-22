@@ -93,4 +93,22 @@ func TestFlag(t *testing.T) {
 			t.Fatalf("Got %v want %v", deref[0].State, f.State)
 		}
 	})
+
+	t.Run("Delete by name does not error", func(t *testing.T) {
+		store.Store.Exec(`DELETE FROM flag`)
+
+		f := fl.Flag{
+			Name:  "featureToDelete",
+			State: "off",
+		}
+		err := srv.Register(t.Context(), &f)
+		if err != nil {
+			t.Fatalf("Error before get %v", err)
+		}
+
+		err = srv.Delete(t.Context(), "featureToDelete")
+		if err != nil {
+			t.Fatalf("Error before get %v", err)
+		}
+	})
 }

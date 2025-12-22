@@ -10,6 +10,7 @@ type Store interface {
 	Create(ctx context.Context, f *Flag) error
 	GetByName(ctx context.Context, name string) (*Flag, error)
 	GetAll(ctx context.Context) (*[]Flag, error)
+	DeleteByName(ctx context.Context, name string) error
 }
 
 type ValidationError struct {
@@ -88,10 +89,19 @@ func (s *Service) Get(ctx context.Context, name string) (*Flag, error) {
 	}
 	return res, nil
 }
+
 func (s *Service) GetAll(ctx context.Context) (*[]Flag, error) {
 	res, err := s.store.GetAll(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get flag")
 	}
 	return res, nil
+}
+
+func (s *Service) Delete(ctx context.Context, name string) error {
+	err := s.store.DeleteByName(ctx, name)
+	if err != nil {
+		return fmt.Errorf("failed to delete flag")
+	}
+	return nil
 }
