@@ -133,6 +133,14 @@ func Test(t *testing.T) {
 			contentType:    nil,
 			expectedStatus: http.StatusOK,
 		},
+		{
+			name:           "tt: /flag/test1 updates test1 flag and returns 200",
+			method:         http.MethodPut,
+			body:           "",
+			endpoint:       "http://0.0.0.0:8080/api/flag/test1",
+			contentType:    nil,
+			expectedStatus: http.StatusOK,
+		},
 		// Operations on all flags
 		{
 			name:           "tt: /flag returns 200",

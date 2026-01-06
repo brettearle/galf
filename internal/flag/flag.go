@@ -11,6 +11,7 @@ type Store interface {
 	GetByName(ctx context.Context, name string) (*Flag, error)
 	GetAll(ctx context.Context) (*[]Flag, error)
 	DeleteByName(ctx context.Context, name string) error
+	UpdateByName(ctx context.Context, name string) error
 }
 
 type ValidationError struct {
@@ -102,6 +103,14 @@ func (s *Service) Delete(ctx context.Context, name string) error {
 	err := s.store.DeleteByName(ctx, name)
 	if err != nil {
 		return fmt.Errorf("failed to delete flag")
+	}
+	return nil
+}
+
+func (s *Service) Update(ctx context.Context, name string) error {
+	err := s.store.UpdateByName(ctx, name)
+	if err != nil {
+		return fmt.Errorf("failed to update flag")
 	}
 	return nil
 }

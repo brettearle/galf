@@ -178,3 +178,60 @@ func TestMemStore_DeleteByName(t *testing.T) {
 		})
 	}
 }
+
+func TestMemStore_UpdateByName(t *testing.T) {
+	tests := []struct {
+		id string // description of this test case
+		// Named input parameters for target function.
+		name    string
+		wantErr bool
+		//Setup required
+		flags []fl.Flag
+	}{
+		{
+			id:      "update success",
+			name:    "featureToUpdate",
+			wantErr: false,
+			flags: []fl.Flag{
+				{
+					Name:  "featureToUpdate",
+					State: "off",
+				},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.id, func(t *testing.T) {
+			m, err := storage.NewMemStore(context.Background())
+			if err != nil {
+				t.Fatalf("could not construct receiver type: %v", err)
+			}
+			for _, f := range tt.flags {
+				err = m.Create(t.Context(), &f)
+				if err != nil {
+					t.Fatalf(".Create(ctx, %v) got error %v want nil", f, err)
+				}
+			}
+
+			gotErr := m.UpdateByName(t.Context(), tt.name)
+			if gotErr != nil {
+				if !tt.wantErr {
+					t.Errorf("UpdateByName() failed: %v", gotErr)
+				}
+				return
+			}
+			if tt.wantErr {
+				t.Fatal("UpdateByName() succeeded unexpectedly")
+			}
+			for _, f := range tt.flags {
+				got, err := m.GetByName(t.Context(), f.Name)
+				if err != nil {
+					t.Fatalf(".GetByName(ctx, %v) got error %v want nil", f, err)
+				}
+				if got.State == f.State {
+					t.Errorf("UpdateByName() failed: %v", got)
+				}
+			}
+		})
+	}
+}

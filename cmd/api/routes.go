@@ -15,5 +15,5 @@ func addRoutes(m *http.ServeMux, f *fl.Service) {
 	//TODO: Delete flag by name
 	m.HandleFunc("DELETE /api/flag/{name}", h.DeleteByName(f))
 	//TODO: Update flag by name
-	//TODO: Update state by name
+	m.HandleFunc("PUT /api/flag/{name}", h.UpdateByName(f))
 }

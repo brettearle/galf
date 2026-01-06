@@ -9,12 +9,6 @@ import (
 	_ "modernc.org/sqlite"
 )
 
-// FOR REFERENCE ONLY
-//type Store interface {
-//	Create(ctx context.Context, f Flag) error
-//	GetByName(ctx context.Context, name string) (Flag, error)
-//}
-
 type MemStore struct {
 	Store *sql.DB
 }
@@ -84,6 +78,25 @@ func (m *MemStore) DeleteByName(ctx context.Context, name string) error {
 	_, err := m.Store.ExecContext(ctx, `
 		DELETE FROM flag WHERE name=? 
 		`, name)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *MemStore) UpdateByName(ctx context.Context, name string) error {
+	current, err := m.GetByName(ctx, name)
+	if err != nil {
+		return err
+	}
+	if current.State == "off" {
+		current.State = "on"
+	} else {
+		current.State = "off"
+	}
+	_, err = m.Store.ExecContext(ctx, `
+		UPDATE flag SET state=? WHERE name=? 
+		`, current.State, current.Name)
 	if err != nil {
 		return err
 	}
